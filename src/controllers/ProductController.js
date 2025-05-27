@@ -1,53 +1,51 @@
 const Product = require("../models/ProductModel");
 const ProductService = require("../services/ProductService");
-const uploadCloudinary= require("../Helper/UploadCloudinary")
+const uploadCloudinary = require("../Helper/UploadCloudinary")
 
 // Tạo sản phẩm mới
 const createProduct = async (req, res) => {
-  
- 
+
+
   // Lấy body của request
   const { body } = req;
   console.log("body", body); // In ra đối tượng body
-  
+
   try {
     const {
-     // productCode,
+      // productCode,
       productName,
       productPrice,
       productCategory,
       productSize,
       //productQuantity,
-     // productExpiry,
-     // productRating,
+      // productExpiry,
+      // productRating,
       productDescription,
     } = req.body;
 
     if (
       // !productCode ||
-       !productName ||
-       !productPrice ||
-       !req.file||
-       !productCategory ||
-     
+      !productName ||
+      !productPrice ||
+      !req.file ||
+      !productCategory ||
+
       // !productQuantity ||
       // !productExpiry ||
-       !productDescription
-     ) 
-    
-     {
-       
-       return res.status(400).json({
-         status: "ERR",
-         message: "All fields are required",
-       });
-     }
-     const productImage= req.file.path;
-    
+      !productDescription
+    ) {
+
+      return res.status(400).json({
+        status: "ERR",
+        message: "All fields are required",
+      });
+    }
+    const productImage = req.file.path;
+
     //console.log("req1233", req.body)
-    
+
     // Kiểm tra input
-   
+
 
     const newProduct = {
       //productCode,
@@ -57,10 +55,10 @@ const createProduct = async (req, res) => {
       productCategory,
       productSize,
       productDescription,
-    
-     // productQuantity,
-     // productExpiry,
-    
+
+      // productQuantity,
+      // productExpiry,
+
       //productRating: productRating || 0, // Nếu không có, mặc định 0
     };
 
@@ -112,7 +110,7 @@ const deleteProduct = async (req, res) => {
         status: "ERR",
         message: "The productId is required",
       });
-      
+
     }
     // const imagePublicId = product.productImage.split("/").pop().split(".")[0]; // Assuming image URL follows Cloudinary format
     // await cloudinary.uploader.destroy(imagePublicId);
@@ -161,7 +159,7 @@ const getAllProduct = async (req, res) => {
 
     const response = await ProductService.getAllProduct(
       Number(limit),
-      Number(page) ,
+      Number(page),
       sort,
       filter
     );
