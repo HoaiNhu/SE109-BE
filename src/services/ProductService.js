@@ -16,6 +16,8 @@ const createProduct = (newProduct) => {
         // productExpiry,
         // productRating,
         productDescription,
+        productMaterial,
+        productWeight
       } = newProduct;
 
       // Check for duplicate productCode or productName

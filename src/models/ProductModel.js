@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+
 const productSchema = new mongoose.Schema(
   {
     productName: { type: String, required: true, unique: true },
@@ -6,12 +7,21 @@ const productSchema = new mongoose.Schema(
     productImage: { type: String, required: true },
     productCategory: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Category", // Sửa từ "productImage" thành "Category"
+      ref: "Category",
       required: true,
     },
     productSize: { type: Number, default: 0 },
     productQuantity: { type: Number, default: 0 },
     productDescription: { type: String, required: true },
+    productMaterial: {
+      type: String,
+      required: true,
+      enum: ["vàng", "bạc", "platinum", "thép không gỉ"],
+    },
+    productWeight: {
+      type: Number,
+      required: true,
+    },
   },
   {
     timestamps: true,

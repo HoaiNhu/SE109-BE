@@ -3,34 +3,34 @@ const productImageService = require("../services/productImageService");
 
 //create productImage
 
-const createProductImg = async(req, res) => {
+const createProductImg = async (req, res) => {
   console.log("req.file", req.body);
-    try {
-         // Thông tin file upload
-        if (!req.body) {
-          return res.status(400).json({
-            status: "ERR",
-            message: "The file input is required",
-          });
-        }
-    
-        // Giả sử bạn muốn trả về đường dẫn file sau khi upload
-        const filePath = req.body;
-    
-        return res.status(200).json({
-          status: "OK",
-          message: "File uploaded successfully",
-          data: {
-            filePath,
-          },
-        });
-      } catch (e) {
-        return res.status(500).json({
-          status: "ERR",
-          message: e.message,
-        });
-      }
-    };
+  try {
+    // Thông tin file upload
+    if (!req.body) {
+      return res.status(400).json({
+        status: "ERR",
+        message: "The file input is required",
+      });
+    }
+
+    // Giả sử bạn muốn trả về đường dẫn file sau khi upload
+    const filePath = req.body;
+
+    return res.status(200).json({
+      status: "OK",
+      message: "File uploaded successfully",
+      data: {
+        filePath,
+      },
+    });
+  } catch (e) {
+    return res.status(500).json({
+      status: "ERR",
+      message: e.message,
+    });
+  }
+};
 
 //update productImage
 const updateproductImage = async (req, res) => {
@@ -110,7 +110,7 @@ const getAllproductImage = async (req, res) => {
 };
 
 module.exports = {
-    createProductImg,
+  createProductImg,
   updateproductImage,
   deleteproductImage,
   getDetailsproductImage,
