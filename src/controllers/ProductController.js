@@ -1,67 +1,64 @@
 const Product = require("../models/ProductModel");
 const ProductService = require("../services/ProductService");
-const uploadCloudinary= require("../Helper/UploadCloudinary")
+const uploadCloudinary = require("../Helper/UploadCloudinary")
 
 // Tạo sản phẩm mới
 const createProduct = async (req, res) => {
-  
- 
-  // Lấy body của request
   const { body } = req;
   console.log("body", body); // In ra đối tượng body
-  
+
   try {
     const {
-     // productCode,
       productName,
       productPrice,
       productCategory,
       productSize,
-      //productQuantity,
-     // productExpiry,
-     // productRating,
       productDescription,
+      productMaterial,
+      productWeight,
     } = req.body;
 
     if (
-      // !productCode ||
-       !productName ||
-       !productPrice ||
-       !req.file||
-       !productCategory ||
-     
-      // !productQuantity ||
-      // !productExpiry ||
-       !productDescription
-     ) 
-    
-     {
-       
-       return res.status(400).json({
-         status: "ERR",
-         message: "All fields are required",
-       });
-     }
-     const productImage= req.file.path;
-    
-    //console.log("req1233", req.body)
-    
-    // Kiểm tra input
-   
+      !productName ||
+      !productPrice ||
+      !req.file ||
+      !productCategory ||
+      !productDescription ||
+      !productMaterial ||
+      !productWeight
+    ) {
+      return res.status(400).json({
+        status: "ERR",
+        message: "All fields are required",
+      });
+    }
+
+    const allowedMaterials = ["vàng", "bạc", "platinum", "thép không gỉ"];
+    if (!allowedMaterials.includes(productMaterial.toLowerCase())) {
+      return res.status(400).json({
+        status: "ERR",
+        message: "Invalid material. Allowed: vàng, bạc, platinum, thép không gỉ",
+      });
+    }
+
+    if (isNaN(productWeight) || Number(productWeight) <= 0) {
+      return res.status(400).json({
+        status: "ERR",
+        message: "Product weight must be a number greater than 0",
+      });
+    }
+
+    const productImage = req.file.path;
 
     const newProduct = {
-      //productCode,
       productName,
       productPrice,
       productImage,
       productCategory,
       productSize,
       productDescription,
-    
-     // productQuantity,
-     // productExpiry,
-    
-      //productRating: productRating || 0, // Nếu không có, mặc định 0
+      productMaterial: productMaterial.toLowerCase(),
+      productWeight: Number(productWeight),
     };
 
     const response = await ProductService.createProduct(newProduct);
@@ -72,7 +69,6 @@ const createProduct = async (req, res) => {
     });
   }
 };
-
 // Cập nhật thông tin sản phẩm
 const updateProduct = async (req, res) => {
   try {
@@ -89,7 +85,27 @@ const updateProduct = async (req, res) => {
 
     // Kiểm tra nếu có file mới để upload
     if (req.file) {
-      data.productImage = req.file.path; // Lưu URL ảnh mới từ Cloudinary
+      data.productImage = req.file.path;
+    }
+
+    // Validate material nếu có
+    if (data.productMaterial) {
+      const allowedMaterials = ["vàng", "bạc", "platinum", "thép không gỉ"];
+      if (!allowedMaterials.includes(data.productMaterial.toLowerCase())) {
+        return res.status(400).json({
+          status: "ERR",
+          message: "Invalid material. Allowed: vàng, bạc, platinum, thép không gỉ",
+        });
+      }
+      data.productMaterial = data.productMaterial.toLowerCase();
+    }
+
+    // Validate weight nếu có
+    if (data.productWeight && (isNaN(data.productWeight) || Number(data.productWeight) <= 0)) {
+      return res.status(400).json({
+        status: "ERR",
+        message: "Product weight must be a number greater than 0",
+      });
     }
 
     const response = await ProductService.updateProduct(productId, data);
@@ -112,7 +128,7 @@ const deleteProduct = async (req, res) => {
         status: "ERR",
         message: "The productId is required",
       });
-      
+
     }
     // const imagePublicId = product.productImage.split("/").pop().split(".")[0]; // Assuming image URL follows Cloudinary format
     // await cloudinary.uploader.destroy(imagePublicId);
@@ -161,7 +177,7 @@ const getAllProduct = async (req, res) => {
 
     const response = await ProductService.getAllProduct(
       Number(limit),
-      Number(page) ,
+      Number(page),
       sort,
       filter
     );

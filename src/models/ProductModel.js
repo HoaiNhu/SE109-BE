@@ -1,19 +1,27 @@
 const mongoose = require("mongoose");
+
 const productSchema = new mongoose.Schema(
   {
-    //productCode: { type: String, required: true },
     productName: { type: String, required: true, unique: true },
     productPrice: { type: Number, required: true },
-    productImage: {type: String, require: true },
-    productCategory:{
+    productImage: { type: String, required: true },
+    productCategory: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "productImage",
-      required: true,},
-      productSize: {type: Number, default:0 },
-   productQuantity: { type: Number, default:0}, //số lượng sp
-    // productExpiry: { type: Date, required: true }, //hạn sd
-    // productRating: { type: Number, required: false },
+      ref: "Category",
+      required: true,
+    },
+    productSize: { type: Number, default: 0 },
+    productQuantity: { type: Number, default: 0 },
     productDescription: { type: String, required: true },
+    productMaterial: {
+      type: String,
+      required: true,
+      enum: ["vàng", "bạc", "platinum", "thép không gỉ"],
+    },
+    productWeight: {
+      type: Number,
+      required: true,
+    },
   },
   {
     timestamps: true,
