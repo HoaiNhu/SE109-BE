@@ -16,6 +16,7 @@ const createProduct = async (req, res) => {
       productDescription,
       productMaterial,
       productWeight,
+      productQuantity,
     } = req.body;
 
     if (
@@ -25,7 +26,8 @@ const createProduct = async (req, res) => {
       !productCategory ||
       !productDescription ||
       !productMaterial ||
-      !productWeight
+      !productWeight||
+      !productQuantity
     ) {
       return res.status(400).json({
         status: "ERR",
@@ -48,6 +50,13 @@ const createProduct = async (req, res) => {
       });
     }
 
+    if (isNaN(productQuantity) || !Number.isInteger(Number(productQuantity)) || Number(productQuantity) <= 0) {
+      return res.status(400).json({
+         status: "ERR",
+         message: "Product Quantity must be an integer greater than 0",
+  });
+}
+
     const productImage = req.file.path;
 
     const newProduct = {
@@ -59,6 +68,7 @@ const createProduct = async (req, res) => {
       productDescription,
       productMaterial: productMaterial.toLowerCase(),
       productWeight: Number(productWeight),
+      productQuantity : Number(productQuantity),
     };
 
     const response = await ProductService.createProduct(newProduct);
@@ -107,6 +117,12 @@ const updateProduct = async (req, res) => {
         message: "Product weight must be a number greater than 0",
       });
     }
+
+    if (isNaN(data.productQuantity) || !Number.isInteger(Number(data.productQuantity)) || Number(data.productQuantity) <= 0) {
+      return res.status(400).json({
+         status: "ERR",
+         message: "Product Quantity must be an integer greater than 0",
+  });}
 
     const response = await ProductService.updateProduct(productId, data);
     return res.status(200).json(response);
