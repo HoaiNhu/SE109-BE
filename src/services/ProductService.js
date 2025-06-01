@@ -12,7 +12,7 @@ const createProduct = (newProduct) => {
         productImage,
         productCategory,
         productPrice,
-        //productQuantity,
+        productQuantity,
         // productExpiry,
         // productRating,
         productDescription,

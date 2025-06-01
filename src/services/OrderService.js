@@ -1,6 +1,7 @@
 const Order = require("../models/OrderModel");
 const Status = require("../models/StatusModel");
 const mongoose = require("mongoose");
+const Product = require("../models/ProductModel");
 
 // Kiểm tra tồn tại đơn hàng
 const checkOrderExistence = async (id) => {
@@ -123,6 +124,27 @@ const createOrder = async (orderData) => {
         status: statusObj._id,
         orderNote,
       });
+
+      // ✅ Sau khi tạo đơn hàng: Trừ tồn kho
+for (const item of orderItems) {
+  const product = await Product.findById(item.product);
+  if (!product) {
+    return reject({
+      status: "ERR",
+      message: `Sản phẩm với ID ${item.product} không tồn tại.`,
+    });
+  }
+
+  if (product.productQuantity < item.quantity) {
+    return reject({
+      status: "ERR",
+      message: `Sản phẩm "${product.title}" không đủ tồn kho.`,
+    });
+  }
+
+  product.productQuantity -= item.quantity;
+  await product.save();
+}
 
       resolve({
         status: "OK",
