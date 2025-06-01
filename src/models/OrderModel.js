@@ -22,10 +22,10 @@ const orderSchema = new mongoose.Schema(
     shippingAddress: {
       familyName: { type: String, required: true },
       userName: { type: String, required: true },
-      userAddress: { type: String, required: false }, // Địa chỉ chi tiết
-      userWard: { type: String, required: false }, // Xã/Phường
-      userDistrict: { type: String, required: false }, // Quận/Huyện
-      userCity: { type: String, required: false }, // Tỉnh/Thành phố
+      userAddress: { type: String, required: true }, // Địa chỉ chi tiết
+      userWard: { type: String, required: true }, // Xã/Phường
+      userDistrict: { type: String, required: true }, // Quận/Huyện
+      userCity: { type: String, required: true }, // Tỉnh/Thành phố
       userPhone: { type: String, required: true },
       userEmail: {
         type: String,
